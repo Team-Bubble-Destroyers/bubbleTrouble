@@ -1,4 +1,4 @@
-import Player from ''
+import Player from '../objects/Player'
 
 export default class FgScene extends Phaser.Scene {
   constructor() {

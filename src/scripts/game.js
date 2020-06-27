@@ -22,18 +22,16 @@ const config = {
     width: 1280,
     height: 720
   },
-  scene: [PreloadScene, MainScene1, BgScene, FgScene],
+  scene: [PreloadScene, MainScene1, BgScene],
   physics: {
     default: 'arcade',
     arcade: {
       debug: true,
-      gravity: { y: 800, debug: false}
+      gravity: { y: 400, debug: false}
     }
   }
 }
 
 window.addEventListener('load', () => {
   const game = new Phaser.Game(config)
-
-
 })

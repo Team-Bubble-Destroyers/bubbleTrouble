@@ -4,12 +4,12 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('fossil-cave', 'assets/img/backgrounds/fossil-cave.png')
     this.load.image('phaser-logo', 'assets/img/phaser-logo.png')
+    this.load.image('fossil-cave', 'assets/img/backgrounds/fossil-cave.png')
+
   }
 
   create() {
-    // this.scene.add('BgScene', BgScene)
     this.scene.start('MainScene1')
     
 

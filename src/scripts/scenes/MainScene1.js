@@ -1,4 +1,6 @@
 import 'phaser'
+import FpsText from '../objects/fpsText'
+
 
 export default class MainScene extends Phaser.Scene {
   fpsText
@@ -8,12 +10,13 @@ export default class MainScene extends Phaser.Scene {
 
   create() {
     this.scene.launch('BgScene')
-    this.scene.start('FgScene')
+    this.scene.launch('FgScene')
     this.fpsText = new FpsText(this)
 
   }
 
   update(){
+ this.fpsText.update()
 
   }
 
