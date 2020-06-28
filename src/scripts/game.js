@@ -22,7 +22,7 @@ const config = {
     width: 1280,
     height: 720
   },
-  scene: [PreloadScene, MainScene1, BgScene],
+  scene: [PreloadScene, MainScene1, BgScene, FgScene],
   physics: {
     default: 'arcade',
     arcade: {
