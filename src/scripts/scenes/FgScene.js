@@ -14,8 +14,10 @@ export default class FgScene extends Phaser.Scene {
     this.fpsText = new FpsText(this)
     this.player = new Player(this, 640, 400, 'player').setScale(4.3)
     
-    this.player.setSize(18, 27, true)
+    this.player.setSize(18, 27, true);
     this.cursors = this.input.keyboard.createCursorKeys()
+
+    this.cable;
 
     this.ground = new Ground(this, this.cameras.main.width / 2, 680, 'ground')
     this.ground.displayWidth = this.cameras.main.width
@@ -28,6 +30,8 @@ export default class FgScene extends Phaser.Scene {
       // bounceX: 1,
       bounceY: 1,
     })
+
+    // new Cable(this, this.player.x, this.player.y, 'cable', this.player.facingLeft)
 
     this.physics.add.collider(this.ground, this.ballGroup)
 
@@ -44,13 +48,17 @@ export default class FgScene extends Phaser.Scene {
     this.createGroups()
   }
 
-  update(time, delta, cursors) {
+  update(time, delta) {
     this.fpsText.update()
 
     this.player.update(this.cursors)
  
     if (this.cursors.space.isDown) {
       this.throwCable()
+    }
+
+    if(this.cable) {
+      this.cable.update(null, delta);
     }
   }
 
@@ -93,9 +101,7 @@ export default class FgScene extends Phaser.Scene {
     })
   }
 
-  hit(ball, cable) {
-    cable.setActive(false), cable.setVisible(false)
-  }
+
   splitBall(ball) {
     ball.disableBody(true, true)
     if (ball.ballSize <= 3) {
@@ -122,22 +128,23 @@ export default class FgScene extends Phaser.Scene {
     const offsetX = 2
     // let cable = this.cables.getFirstDead()
 
-    // if (!this.cable) {
+    if (!this.cable) {
       const cableX = this.player.x + (this.player.facingLeft ? -offsetX : offsetX)
       const cableY = this.player.y + 648
 
       this.cable = new Cable(this, cableX, cableY, 'cable', this.player.facingLeft).setScale(2)
       // this.cables.add(cable)
-    // }
+    }
   }
-  destroyCable() {
-    this.cable.destroy()
-  }
+
+  // destroyCable() {
+  //   this.cable.destroy()
+  // }
 
   createCollisions() {
     this.physics.add.collider(this.player, this.ground)
     // this.physics.add.collider(this.cable, this.spikeGroup)
-    //   this.physics.add.collider(this.ball,)
+    // this.physics.add.collider(this.ballGroup, this.cable)
   }
 }
 // update(time, cursors, throwCable) {

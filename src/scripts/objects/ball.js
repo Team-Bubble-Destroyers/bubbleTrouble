@@ -1,6 +1,7 @@
 export default class Ball extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, left = false, prevBall = null, ballSize = 1) {
     super(scene, x, y, 'ball', left, prevBall, ballSize)
+    
     scene.add.existing(this)
     scene.physics.add.existing(this)
     this.ballSize = ballSize;
