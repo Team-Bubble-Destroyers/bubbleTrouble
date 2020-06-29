@@ -4,10 +4,10 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
   constructor(scene, x, y, spriteKey) {
 
     super(scene, x, y, spriteKey)
-    scene = scene
-    scene.add.existing(this)
-    scene.physics.world.enable(this)
-
+    this.scene = scene
+    this.scene.add.existing(this)
+    this.scene.physics.world.enable(this)
+    // this.body.setAllowGravity(true)
     this.facingLeft = false
     this.setCollideWorldBounds(true)
 
