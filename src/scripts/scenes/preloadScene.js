@@ -4,14 +4,24 @@ export default class PreloadScene extends Phaser.Scene {
   }
 
   preload() {
+    this.load.image('phaser-logo', 'assets/img/phaser-logo.png')
+    this.load.image('fossil-cave', 'assets/img/backgrounds/fossil-cave.png')
+    this.load.spritesheet('player', "assets/img/spritesheets/dude.png", {
+      frameWidth:24,
+      frameHeight:27
+    })
+    this.load.image('cable', 'assets/img/sprites/line.png')
+    this.load.image('spikes', 'assets/img/sprites/spikes.png')
     this.load.image('ball', 'assets/img/phaser-logo.png')
     this.load.image('ground', 'assets/img/ground.png')
   }
 
   create() {
-    this.scene.start('MainScene')
 
-    /**
+    this.scene.start('MainScene1')
+    
+
+    /**.
      * This is how you would dynamically import the mainScene class (with code splitting),
      * add the mainScene to the Scene Manager
      * and start the scene.

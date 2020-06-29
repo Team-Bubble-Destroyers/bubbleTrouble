@@ -6,6 +6,9 @@ const dev = {
   devtool: 'inline-source-map',
   devServer: {
     open: true
+  },
+  watchOptions: {
+    poll: 1000
   }
 }
 
