@@ -6,7 +6,7 @@ export default class BgScene extends Phaser.Scene {
   }
 
   create() {
-    this.add.image(0, 0,'fossil-cave').setOrigin(0).setScale(0.7)
+    this.add.image(0, -100,'fossil-cave').setOrigin(0).setScale(0.7)
   }
 
 }

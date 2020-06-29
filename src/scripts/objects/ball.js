@@ -16,19 +16,14 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.setCircle(111);
 
     this.ballHeights = {
-      1: -500,
-      2: -450,
-      3: -400,
-      4: -350
+      1: -450,
+      2: -400,
+      3: -350,
+      4: -300
     }
 
     this.setCollideWorldBounds(true)
       .setBounce(1.0)
-      .setInteractive()
-      .on('pointerdown', () => {
-        console.log(this)
-        // console.log(this.scale);
-      })
   }
 
   updateBounce () {
@@ -41,6 +36,9 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
     this.updateBounce();
 
     const moveDistance = this.speed * delta;
+    // if (this.body.touching.right || this.body.touching.left){
+    //   this.left = !this.left
+    // }
     if (this.x + this.body.halfWidth >= 1280 || this.x - this.body.halfWidth <= 0) {
       this.left = !this.left
     }
@@ -49,5 +47,7 @@ export default class Ball extends Phaser.Physics.Arcade.Sprite {
       this.x -= moveDistance;
     }
     else {this.x += moveDistance}
+
+
   }
 }

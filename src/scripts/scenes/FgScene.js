@@ -14,7 +14,7 @@ export default class FgScene extends Phaser.Scene {
 
   create() {
     this.fpsText = new FpsText(this)
-    this.player = new Player(this, 640, 400, 'player').setScale(4.3)
+    this.player = new Player(this, 640, 540, 'player').setScale(2.75)
 
     this.player.setSize(18, 27, true)
     this.cursors = this.input.keyboard.createCursorKeys()
@@ -28,20 +28,22 @@ export default class FgScene extends Phaser.Scene {
       allowGravity: true,
       // collideWorldBounds: true,
       // bounceX: 1,
-      bounceY: 1,
+      // bounceY: 1,
     })
 
-    // new Cable(this, this.player.x, this.player.y, 'cable', this.player.facingLeft)
 
     this.physics.add.collider(this.ground, this.ballGroup)
 
-    this.initBall = new Ball(this, this.cameras.main.width / 2, 300, false, false, 1)
+    this.initBall = new Ball(this, this.cameras.main.width * (2/3), 300, false, false, 1)
       .setScale(0.5)
-      .on('pointerdown', () => {
-        this.splitBall(this.initBall)
-      })
+    
+    this.initBall2 =new Ball(this, this.cameras.main.width / 3, 300, true, false, 1)
+    .setScale(0.5)
+    
     // change setCircle parameters to be half the width of the circle png img when changed. (the value is the diam of the circle)
     this.ballGroup.add(this.initBall)
+    this.ballGroup.add(this.initBall2)
+    this.initBall2.left = true
 
     this.createGroups()
     this.createAnimations()
@@ -101,17 +103,18 @@ export default class FgScene extends Phaser.Scene {
     })
   }
 
-  splitBall(ball) {
-    this.destroyCable()
+  splitBall(ball,cable) {
+    if (cable) cable.destroy()
+
     ball.disableBody(true, true)
     if (ball.ballSize <= 3) {
-      const rightball = new Ball(this, ball.x, ball.y, false, ball, ball.ballSize + 1)
+      const rightball = new Ball(this, ball.x + ball.body.halfHeight, ball.y + ball.body.halfHeight, false, ball, ball.ballSize + 1)
         .setCircle(ball.body.radius)
         .setScale(ball.scale * 0.75)
         .on('pointerdown', () => {
           this.splitBall(rightball)
         })
-      const leftball = new Ball(this, ball.x, ball.y, true, ball, ball.ballSize + 1)
+      const leftball = new Ball(this, ball.x + ball.body.halfHeight, ball.y + ball.body.halfHeight, true, ball, ball.ballSize + 1)
         .setCircle(ball.body.radius)
         .setScale(ball.scale * 0.75)
         .on('pointerdown', () => {
@@ -119,7 +122,9 @@ export default class FgScene extends Phaser.Scene {
         })
 
       this.ballGroup.add(rightball)
+      rightball.setVelocityY(-200)
       this.ballGroup.add(leftball)
+      leftball.setVelocityY(-200)
       leftball.left = true
     }
   }
@@ -127,7 +132,6 @@ export default class FgScene extends Phaser.Scene {
   throwCable() {
     const offsetX = 2
     // let cable = this.cables.getFirstDead()
-    console.log(this.cables.getLength())
     if (!this.cables.getLength()) {
       const cableX = this.player.x + (this.player.facingLeft ? -offsetX : offsetX)
       const cableY = this.player.y + 648
@@ -138,22 +142,19 @@ export default class FgScene extends Phaser.Scene {
 
   }
 
-  destroyCable() {
+  destroyCable(spike, cable) {
+    cable.destroy()
+  }
 
-    console.log('cable',this.cables.getChildren())
-    this.cables.getChildren()[0].destroy()
+  destroyBall(spike,ball){
+    ball.destroy()
   }
 
   createCollisions() {
     this.physics.add.collider(this.player, this.ground)
     this.physics.add.overlap(this.spikeGroup, this.cables, this.destroyCable, null, this)
-    this.physics.add.collider(this.ballGroup, this.cables, this.splitBall, null, this)
+    this.physics.add.overlap(this.ballGroup, this.cables, this.splitBall, null, this)
+    this.physics.add.overlap(this.spikeGroup, this.ballGroup, this.destroyBall, null, this)
   }
 }
-// update(time, cursors, throwCable) {
-//   this.updateMovement(cursors)
-//   if (cursors.space.isDown && time > this.lastThrown){
-//     throwCable()
-//     this.lastThrown = time + this.throwDelay
-//   }
-// }
+
