@@ -9,25 +9,21 @@ export default class Cable extends Phaser.Physics.Arcade.Sprite {
     this.setSize(7, 401, true)
     this.speed = Phaser.Math.GetSpeed(375,1)
     this.body.setAllowGravity(false)
-
-    this.reset(x,y,facingLeft)
+    // this.reset(x,y,facingLeft)
   }
 
   update(time,delta){
-    this.lifespan -= delta
+    if(this.body.touching.up){
+      this.destroy()
+    }
+
     const moveDistance = this.speed * delta
     this.y -= moveDistance
 
-      if(this.lifespan <= 0){
-        this.setActive(false)
-        this.setVisible(false)
-      }
+      // if(this.lifespan <= 0){
+      //   this.setActive(false)
+      //   this.setVisible(false)
+      // }
   }
-
-  reset(x, y, facingLeft){
-    this.setActive(true)
-    this.setVisible(true)
-    this.lifespan = 2400
-    this.setPosition(x,y)
-  }
+  
 }

@@ -22,10 +22,14 @@ export default class FgScene extends Phaser.Scene {
     this.createGroups()
   }
 
-  update(time, delta) {
+  update(time, delta, cursors) {
     this.fpsText.update()
+    
+    this.player.update(this.cursors)
 
-    this.player.update(time, this.cursors, this.throwCable)
+    if(!this.cable && this.cursors.space.isDown){
+     this.throwCable()
+    }
   }
 
   createCeiling(x, y) {
@@ -37,12 +41,12 @@ export default class FgScene extends Phaser.Scene {
     this.spikeGroup = this.physics.add.staticGroup({ classType: Spikes, allowGravity: false})
     this.createCeiling(0,0)
     this.createCeiling(1844,0)
-    this.cables = this.physics.add.group({
-      classType: Cable,
-      maxSize: 1,
-      runChildUpdate: true,
-      allowGravity: false,
-    })
+    // this.cables = this.physics.add.group({
+    //   classType: Cable,
+    //   maxSize: 1,
+    //   runChildUpdate: true,
+    //   allowGravity: false,
+    // })
   }
 
   createAnimations() {
@@ -71,19 +75,31 @@ export default class FgScene extends Phaser.Scene {
 
   throwCable() {
     const offsetX = 2
-    let cable = this.cables.getFirstDead()
-    const cableX = this.player.x + (this.player.facingLeft ? -offsetX : offsetX)
-    const cableY = this.player.y + 600
-    if (!cable) {
-      cable = new Cable(this, cableX, cableY, 'cable', this.player.facingLeft).setScale(2)
-      this.cables.add(cable)
+    // let cable = this.cables.getFirstDead()
+
+    if (!this.cable) {
+      const cableX = this.player.x + (this.player.facingLeft ? -offsetX : offsetX)
+      const cableY = this.player.y + 600
+
+      this.cable = new Cable(this, cableX, cableY, 'cable', this.player.facingLeft).setScale(2)
+      // this.cables.add(cable)
     }
-    console.log('cable', cable)
-    cable.reset(cableX, cableY, this.player.facingLeft)
+  
+  }
+  destroyCable(){
+    this.cable.destroy()
   }
 
   createCollisions(){
-    this.physics.add.collider(this.cables, this.spikeGroup)
-    
+  //   this.physics.add.collider(this.player, this.spikeGroup)
+    this.physics.add.collider(this.cable, this.spikeGroup)
+  //   this.physics.add.collider(this.ball,)
   }
 }
+// update(time, cursors, throwCable) {
+//   this.updateMovement(cursors)
+//   if (cursors.space.isDown && time > this.lastThrown){
+//     throwCable()
+//     this.lastThrown = time + this.throwDelay
+//   } 
+// }

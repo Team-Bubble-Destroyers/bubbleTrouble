@@ -13,16 +13,12 @@ export default class Player extends Phaser.Physics.Arcade.Sprite {
 
     this.throwDelay = 2400
 
-    this.lastThrown = 0
+    // this.lastThrown = 0
     
   }
 
-  update(time, cursors, throwCable) {
+  update(cursors) {
     this.updateMovement(cursors)
-    if (cursors.space.isDown && time > this.lastThrown){
-      throwCable()
-      this.lastThrown = time + this.throwDelay
-    } 
   }
 
   updateMovement(cursors) {
